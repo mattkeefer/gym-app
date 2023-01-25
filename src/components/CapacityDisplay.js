@@ -8,10 +8,11 @@ export default function CapacityDisplay(props) {
 
         return (
             <div className="display">
-                <h3>{floorData.title}</h3>
+                <h3 id="fullTitle">{floorData.title}</h3>
+                <h3 id="shortTitle">{floorData.shortTitle}</h3>
                 <div className="numbers">
-                    <p>{data.Capacity}/{floorData.maxCapacity}</p>
-                    <p>{Math.round(data.Capacity / floorData.maxCapacity * 100)}%</p>
+                    <p id="numCapacity">{data.Capacity}/{floorData.maxCapacity}</p>
+                    <p id="percentage">{Math.round(data.Capacity / floorData.maxCapacity * 100)}%</p>
                 </div>
                 <div className="date">
                     <p>{readableDate}</p>

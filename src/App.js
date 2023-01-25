@@ -12,8 +12,8 @@ function App() {
       const floorCollection = collection(db, floorName);
       const latestFloor = query(floorCollection, orderBy("Updated", "desc"), limit(1));
       const querySnapshot = await getDocs(latestFloor);
-      const { title, maxCapacity } = getInformation(floorName);
-      return ({id: querySnapshot.docs[0].id, data: querySnapshot.docs[0].data(), title: title, maxCapacity: maxCapacity});
+      const { title, shortTitle, maxCapacity } = getInformation(floorName);
+      return ({id: querySnapshot.docs[0].id, data: querySnapshot.docs[0].data(), title: title, shortTitle: shortTitle, maxCapacity: maxCapacity});
   }
 
   async function refreshData() {
@@ -27,17 +27,17 @@ function App() {
   function getInformation(floorName) {
       switch(floorName) {
           case 'floor2':
-              return ({title: 'Marino Second Floor', maxCapacity: 105});
+              return ({title: 'Marino Second Floor', shortTitle: 'Floor 2', maxCapacity: 105});
           case 'floor3weight':
-              return ({title: 'Marino Weight Room', maxCapacity: 65});
+              return ({title: 'Marino Weight Room', shortTitle: 'Weights', maxCapacity: 65});
           case 'floor3select':
-              return ({title: 'Marino Select & Cardio', maxCapacity: 90});
+              return ({title: 'Marino Select & Cardio', shortTitle: 'Floor 3', maxCapacity: 90});
           case 'squash':
-              return ({title: 'SquashBusters Center', maxCapacity: 60});
+              return ({title: 'SquashBusters Center', shortTitle: 'Squash', maxCapacity: 60});
           case 'gymnasium':
-              return ({title: 'Marino Gymnasium', maxCapacity: 60});
+              return ({title: 'Marino Gymnasium', shortTitle: 'Gym', maxCapacity: 60});
           case 'track':
-              return ({title: 'Marino Track Area', maxCapacity: 20});
+              return ({title: 'Marino Center Track', shortTitle: 'Track', maxCapacity: 20});
           default:
               throw new Error('Unrecognized floor name');
       }
@@ -48,7 +48,7 @@ function App() {
   }, []);
 
   return (
-    <StatusBoard refreshData={refreshData} gymData={gymData}/>
+    <StatusBoard gymData={gymData}/>
   );
 }
 
