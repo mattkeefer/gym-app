@@ -3,7 +3,7 @@ export default function CapacityDisplay(props) {
     if (floorData) {
         const data = floorData.data;
         const time = data.Time;
-        const readableDate = `${time[1]}/${time[2]} ${time[3] > 12 ? time[3] - 12 : time[3]}:${time[4]} ${time[3] > 12 ? 'PM' : 'AM'}`;
+        const readableDate = `${time[1]}/${time[2]} ${time[3] > 12 ? time[3] - 12 : time[3]}:${time[4] < 10 ? `0${time[4]}` : time[4]} ${time[3] > 12 ? 'PM' : 'AM'}`;
 
         return (
             <div className="display">
