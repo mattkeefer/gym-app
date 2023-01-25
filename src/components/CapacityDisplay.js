@@ -2,9 +2,8 @@ export default function CapacityDisplay(props) {
     const floorData = props.floorData;
     if (floorData) {
         const data = floorData.data;
-        const date = data.Updated ? new Date(data.Updated.seconds * 1000) : undefined;
-        
-        const readableDate = date ? `${date.toLocaleDateString()} ${date.toLocaleTimeString()}` : 'No date information';
+        const time = data.Time;
+        const readableDate = `${time[1]}/${time[2]} ${time[3] > 12 ? time[3] - 12 : time[3]}:${time[4]} ${time[3] > 12 ? 'PM' : 'AM'}`;
 
         return (
             <div className="display">

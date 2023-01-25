@@ -21,7 +21,6 @@ function App() {
       const promiseFloorDataList = floorList.map(floor => fetchFloorData(floor));
       const data = await Promise.all(promiseFloorDataList);
       setGymData(data);
-      console.log(gymData);
   }
 
   function getInformation(floorName) {
