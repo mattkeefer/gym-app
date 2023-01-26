@@ -1,6 +1,7 @@
 import React from "react";
 import "../App.css";
 import CapacityDisplay from "./CapacityDisplay";
+import FloorHistoryDisplay from "./FloorHistoryDisplay";
 
 export default function StatusBoard(props) {
 
@@ -17,6 +18,7 @@ export default function StatusBoard(props) {
                 <CapacityDisplay floorData={gymData[4]} />
                 <CapacityDisplay floorData={gymData[5]} />
             </div>
+            <FloorHistoryDisplay />
         </section>
     );
 }
