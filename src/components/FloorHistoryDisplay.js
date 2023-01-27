@@ -127,7 +127,41 @@ export default function FloorHistoryDisplay(props) {
     function calculateAverage(history) {
         const totalCapacity = history.reduce((acc, cur) => acc + cur.data.Capacity, 0);
         const avgCapacity = totalCapacity / history.length;
-        return avgCapacity;
+        return Math.round(avgCapacity);
+    }
+
+    function getHours(location, dayOfWeek) {
+        if (location === 'squash') {
+            switch (dayOfWeek) {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    return timeOptions.filter((time) => time.value >= 6 && time.value < 24);
+                case 4:
+                    return timeOptions.filter((time) => time.value >= 6 && time.value <= 21);
+                case 5:
+                    return timeOptions.filter((time) => time.value >= 8 && time.value <= 21);
+                case 6:
+                    return timeOptions.filter((time) => time.value >= 10 && time.value <= 21);
+                default:
+                    throw new Error('Unrecognized day of week');
+            }
+        } else {
+            switch (dayOfWeek) {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    return timeOptions.filter((time) => time.value >= 5 && time.value < 24);
+                case 5:
+                case 6:
+                    return timeOptions.filter((time) => time.value >= 8 && time.value < 24);
+                default:
+                    throw new Error('Unrecognized day of week');
+            }
+        }
     }
 
     return (
@@ -150,7 +184,7 @@ export default function FloorHistoryDisplay(props) {
                 <option value={6}>Sunday</option>
             </select>
             <select name="time" id="time" onChange={(e) => setTime(Number(e.target.value))} value={time}>
-                {timeOptions.map((option) => (
+                {getHours(location, day).map((option) => (
                     <option key={option.value} value={option.value}>{option.label}</option>
                 ))}
             </select>
