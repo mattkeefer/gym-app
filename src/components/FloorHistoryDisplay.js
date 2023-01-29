@@ -121,7 +121,8 @@ export default function FloorHistoryDisplay(props) {
     async function refreshData() {
         const promiseData = getFloorDataOnDay(location, day, time);
         const data = await promiseData;
-        setHistory(data);
+        const { avgCapacity, maxCapacity } = calculateAverage(data);
+        setHistory({data: data, avgCapacity: avgCapacity, maxCapacity: maxCapacity});
     }
 
     function calculateAverage(history) {
@@ -192,7 +193,7 @@ export default function FloorHistoryDisplay(props) {
             <button onClick={refreshData}>
                 View History
             </button>
-            {history.length > 0 && <h4>Average Capacity: {calculateAverage(history).avgCapacity}/{calculateAverage(history).maxCapacity} = {Math.round(calculateAverage(history).avgCapacity / calculateAverage(history).maxCapacity * 100)}% </h4>}
+            {history.data.length > 0 && <h4>Average Capacity: {history.avgCapacity}/{history.maxCapacity} = {Math.round(history.avgCapacity / history.maxCapacity * 100)}% </h4>}
         </div>
     );
 }
