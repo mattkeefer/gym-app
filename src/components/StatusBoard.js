@@ -18,7 +18,7 @@ export default function StatusBoard(props) {
                 <CapacityDisplay floorData={gymData[4]} />
                 <CapacityDisplay floorData={gymData[5]} />
             </div>
-            <FloorHistoryDisplay />
+            <FloorHistoryDisplay getInformation={props.getInformation}/>
         </section>
     );
 }

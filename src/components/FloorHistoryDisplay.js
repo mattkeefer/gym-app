@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../App.css";
-import { collection, query, orderBy, limit, getDocs, where } from "@firebase/firestore";
+import { collection, query, limit, getDocs, where } from "@firebase/firestore";
 import { db } from "../firebase";
 
 export default function FloorHistoryDisplay(props) {
@@ -127,7 +127,8 @@ export default function FloorHistoryDisplay(props) {
     function calculateAverage(history) {
         const totalCapacity = history.reduce((acc, cur) => acc + cur.data.Capacity, 0);
         const avgCapacity = totalCapacity / history.length;
-        return Math.round(avgCapacity);
+        const { maxCapacity } = props.getInformation(location);
+        return {avgCapacity: Math.round(avgCapacity), maxCapacity: maxCapacity}
     }
 
     function getHours(location, dayOfWeek) {
@@ -191,7 +192,7 @@ export default function FloorHistoryDisplay(props) {
             <button onClick={refreshData}>
                 View History
             </button>
-            {history.length > 0 && <h4>Average Capacity: {calculateAverage(history)}</h4>}
+            {history.length > 0 && <h4>Average Capacity: {calculateAverage(history).avgCapacity}/{calculateAverage(history).maxCapacity} = {Math.round(calculateAverage(history).avgCapacity / calculateAverage(history).maxCapacity * 100)}% </h4>}
         </div>
     );
 }

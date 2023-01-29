@@ -43,11 +43,11 @@ function App() {
   }
 
   useEffect(() => {
-    refreshData();  
+    refreshData();
   }, []);
 
   return (
-    <StatusBoard gymData={gymData}/>
+    <StatusBoard gymData={gymData} getInformation={getInformation}/>
   );
 }
 
