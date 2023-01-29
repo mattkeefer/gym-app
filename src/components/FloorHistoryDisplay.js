@@ -193,7 +193,7 @@ export default function FloorHistoryDisplay(props) {
             <button onClick={refreshData}>
                 View History
             </button>
-            {history.data.length > 0 && <h4>Average Capacity: {history.avgCapacity}/{history.maxCapacity} = {Math.round(history.avgCapacity / history.maxCapacity * 100)}% </h4>}
+            {history.data && history.data.length > 0 && <h4>Average Capacity: {history.avgCapacity}/{history.maxCapacity} = {Math.round(history.avgCapacity / history.maxCapacity * 100)}% </h4>}
         </div>
     );
 }
