@@ -7,7 +7,7 @@ export default function FloorHistoryDisplay(props) {
 
     const [location, setLocation] = useState('floor2');
     const [day, setDay] = useState(0);
-    const [time, setTime] = useState(0);
+    const [time, setTime] = useState(5);
 
     const [history, setHistory] = useState([]);
 
@@ -132,6 +132,16 @@ export default function FloorHistoryDisplay(props) {
         return {avgCapacity: Math.round(avgCapacity), maxCapacity: maxCapacity}
     }
 
+    function filterTimeOptions(lowerLimit, upperLimit, inclusive) {
+        const options = inclusive 
+            ? timeOptions.filter((time) => time.value >= lowerLimit && time.value <= upperLimit) 
+            : timeOptions.filter((time) => time.value >= lowerLimit && time.value < upperLimit);
+        if (!options.find(option => option.value === time)) {
+            setTime(Number(options[0].value));
+        }
+        return options;
+    }
+
     function getHours(location, dayOfWeek) {
         if (location === 'squash') {
             switch (dayOfWeek) {
@@ -139,13 +149,13 @@ export default function FloorHistoryDisplay(props) {
                 case 1:
                 case 2:
                 case 3:
-                    return timeOptions.filter((time) => time.value >= 6 && time.value < 24);
+                    return filterTimeOptions(6, 24, false);
                 case 4:
-                    return timeOptions.filter((time) => time.value >= 6 && time.value <= 21);
+                    return filterTimeOptions(6, 21, true);
                 case 5:
-                    return timeOptions.filter((time) => time.value >= 8 && time.value <= 21);
+                    return filterTimeOptions(8, 21, true);
                 case 6:
-                    return timeOptions.filter((time) => time.value >= 10 && time.value <= 21);
+                    return filterTimeOptions(10, 21, true);
                 default:
                     throw new Error('Unrecognized day of week');
             }
@@ -156,10 +166,10 @@ export default function FloorHistoryDisplay(props) {
                 case 2:
                 case 3:
                 case 4:
-                    return timeOptions.filter((time) => time.value >= 5 && time.value < 24);
+                    return filterTimeOptions(5, 24, false);
                 case 5:
                 case 6:
-                    return timeOptions.filter((time) => time.value >= 8 && time.value < 24);
+                    return filterTimeOptions(8, 24, false);
                 default:
                     throw new Error('Unrecognized day of week');
             }
