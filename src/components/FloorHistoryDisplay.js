@@ -7,7 +7,6 @@ export default function FloorHistoryDisplay(props) {
 
     const [location, setLocation] = useState('floor2');
     const [day, setDay] = useState(0);
-    const [time, setTime] = useState(5);
 
     const [history, setHistory] = useState([]);
 
@@ -118,16 +117,22 @@ export default function FloorHistoryDisplay(props) {
         return data;
     }
 
-    async function refreshData() {
-        const promiseData = getFloorDataOnDay(location, day, time);
-        const data = await promiseData;
-        const { avgCapacity, maxCapacity } = calculateAverage(data);
-        setHistory({data: data, avgCapacity: avgCapacity, maxCapacity: maxCapacity});
+    async function refreshTable() {
+        const fullHistory = [];
+        for (let timeOption of getHours(location, day)) {
+            const promiseData = getFloorDataOnDay(location, day, timeOption.value);
+            const data = await promiseData;
+            if (data.length > 0) {
+                const { avgCapacity, maxCapacity } = calculateAverage(data);
+                fullHistory.push({time: timeOption, avgCapacity: avgCapacity, maxCapacity: maxCapacity});
+            }
+        }
+        setHistory(fullHistory);
     }
 
-    function calculateAverage(history) {
-        const totalCapacity = history.reduce((acc, cur) => acc + cur.data.Capacity, 0);
-        const avgCapacity = totalCapacity / history.length;
+    function calculateAverage(data) {
+        const totalCapacity = data.reduce((acc, cur) => acc + cur.data.Capacity, 0);
+        const avgCapacity = totalCapacity / data.length;
         const { maxCapacity } = props.getInformation(location);
         return {avgCapacity: Math.round(avgCapacity), maxCapacity: maxCapacity}
     }
@@ -136,9 +141,6 @@ export default function FloorHistoryDisplay(props) {
         const options = inclusive 
             ? timeOptions.filter((time) => time.value >= lowerLimit && time.value <= upperLimit) 
             : timeOptions.filter((time) => time.value >= lowerLimit && time.value < upperLimit);
-        if (!options.find(option => option.value === time)) {
-            setTime(Number(options[0].value));
-        }
         return options;
     }
 
@@ -195,15 +197,31 @@ export default function FloorHistoryDisplay(props) {
                 <option value={5}>Saturday</option>
                 <option value={6}>Sunday</option>
             </select>
-            <select name="time" id="time" onChange={(e) => setTime(Number(e.target.value))} value={time}>
-                {getHours(location, day).map((option) => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
-                ))}
-            </select>
-            <button onClick={refreshData}>
+            <button onClick={refreshTable}>
                 View History
             </button>
-            {history.data && history.data.length > 0 && <h4>Average Capacity: {history.avgCapacity}/{history.maxCapacity} = {Math.round(history.avgCapacity / history.maxCapacity * 100)}% </h4>}
+            <div className="table">
+                {history.length > 0 && (
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style={{width:"150px"}}>Time</th>
+                                <th>Average Count</th>
+                                <th>Average Capacity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {history.map(data => (
+                                <tr key={data.time.value}>
+                                    <td>{data.time.label}</td>
+                                    <td>{data.avgCapacity}</td>
+                                    <td>{Math.round(data.avgCapacity / data.maxCapacity * 100)}%</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+            </div>
         </div>
     );
 }
